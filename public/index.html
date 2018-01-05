@@ -81,7 +81,7 @@
 
       chatChannel.watch(function (data) {  
         console.log(data)
-        $('#messages-list').append($('<li>').text(data));
+        $('#messages-list').append($('<li>').text(data["user"] + ": " + data["data"]));
       });
     </script>  
   </body>
