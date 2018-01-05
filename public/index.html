@@ -23,7 +23,7 @@
       var options = {
         path: '/socketcluster/',
         port: 80,
-        hostname: 'sc-chat-vybd.7e14.starter-us-west-2.openshiftapps.com',
+        hostname: '127.0.0.1',
         autoConnect: true,
         secure: false,
         rejectUnauthorized: false,
@@ -55,19 +55,24 @@
         console.log('Connected to server');
       });
 
-      $('form').submit(function(){
-        if($('#message').val() != '') {
-          socket.emit('chat', $('#message').val());
-        } 
-
-        $('#message').val('')
-        return false;
-      });
-
       var chatChannel = socket.subscribe('MyClassroom');
 
       chatChannel.on('subscribeFail', function(err) {  
         console.log('Failed to subscribe to Yell channel due to error: ' + err);
+      });
+
+      $('form').submit(function(){
+        if($('#message').val() != '') {
+          socket.channels.MyClassroom.publish($('#message').val(), function(err){
+            if(err){
+              console.log('hello' + err);  
+            }
+          });
+          //socket.emit('chat', $('#message').val());
+        } 
+
+        $('#message').val('')
+          return false;
       });
 
       chatChannel.watch(function (data) {  
